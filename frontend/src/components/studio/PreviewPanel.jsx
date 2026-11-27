@@ -77,7 +77,7 @@ export default function PreviewPanel({ stepLabel, generation, filter, setFilter,
       <EmptyState
         icon="sparkles"
         title="여기에 광고 이미지가 표시돼요"
-        description="왼쪽에서 상품과 모델을 고르고, 요청사항을 적은 뒤 '이미지 생성하기'를 눌러 주세요."
+        description="상품과 모델 이미지를 고르고, 요청사항을 적은 뒤 '이미지 생성하기'를 눌러 주세요."
       />
     );
   }
