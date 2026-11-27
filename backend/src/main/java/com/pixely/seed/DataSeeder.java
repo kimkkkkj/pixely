@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,7 @@ import java.util.Locale;
 /**
  * 시작 시 1회 실행:
  * 1) 관리자 계정 생성 (ADMIN_EMAIL / ADMIN_PASSWORD)
+ *    + 개발용 테스트 셀러 계정 (DEV_SELLER_EMAIL / DEV_SELLER_PASSWORD 가 설정된 경우만)
  * 2) 공용 상품 샘플: classpath:seed/products (원본 시안 service-images/tab1 상품 이미지)
  *    → 없으면 코드로 그린 상품 일러스트
  * 3) 공용 모델 샘플: 항상 코드로 그린 가상 모델 (실존 인물/연예인 사진은 쓰지 않음)
@@ -61,9 +63,16 @@ public class DataSeeder implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
     private final PixelyProperties properties;
 
+    @Value("${DEV_SELLER_EMAIL:}")
+    private String devSellerEmail;
+
+    @Value("${DEV_SELLER_PASSWORD:}")
+    private String devSellerPassword;
+
     @Override
     public void run(ApplicationArguments args) {
         seedAdmin();
+        seedDevSeller();
         seedProducts();
         seedModels();
         int stale = generationRepository.failStale(List.of(GenerationStatus.PENDING, GenerationStatus.PROCESSING),
@@ -82,6 +91,16 @@ public class DataSeeder implements ApplicationRunner {
         userRepository.save(User.builder().email(email).password(passwordEncoder.encode(password))
                 .nickname("관리자").role(Role.ADMIN).build());
         log.info("Admin account created: {}", email);
+    }
+
+    /** 로컬 테스트용 일반(셀러) 계정 — 두 값이 모두 있을 때만 생성. 운영 .env 에는 넣지 말 것 */
+    private void seedDevSeller() {
+        if (devSellerEmail == null || devSellerEmail.isBlank() || devSellerPassword == null || devSellerPassword.isBlank()) return;
+        String email = devSellerEmail.trim().toLowerCase(Locale.ROOT);
+        if (userRepository.existsByEmail(email)) return;
+        userRepository.save(User.builder().email(email).password(passwordEncoder.encode(devSellerPassword))
+                .nickname("테스트셀러").role(Role.USER).build());
+        log.info("Dev seller account created: {}", email);
     }
 
     private void seedProducts() {

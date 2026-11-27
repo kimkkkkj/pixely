@@ -6,6 +6,14 @@ import Button from '../common/Button';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** 개발 모드 전용 테스트 계정 (루트 .env 의 VITE_DEV_*). 빌드(production)에서는 빈 배열 → 버튼 미표시 */
+const DEV_ACCOUNTS = import.meta.env.DEV
+  ? [
+      { label: '테스트 셀러', email: import.meta.env.VITE_DEV_SELLER_EMAIL, password: import.meta.env.VITE_DEV_SELLER_PASSWORD },
+      { label: '관리자', email: import.meta.env.VITE_DEV_ADMIN_EMAIL, password: import.meta.env.VITE_DEV_ADMIN_PASSWORD },
+    ].filter((a) => a.email && a.password)
+  : [];
+
 function validate(mode, form) {
   const errors = {};
   if (!form.email.trim()) errors.email = '이메일을 입력해 주세요.';
@@ -55,6 +63,12 @@ export default function AuthForm({ mode = 'login', onSuccess }) {
     }
   };
 
+  const fillDevAccount = (account) => {
+    setForm((f) => ({ ...f, email: account.email, password: account.password }));
+    setErrors({});
+    setServerError(null);
+  };
+
   const field = (key, label, type, extra = {}) => (
     <div className="px-field">
       <label className="px-label" htmlFor={`${id}-${key}`}>{label}</label>
@@ -74,6 +88,16 @@ export default function AuthForm({ mode = 'login', onSuccess }) {
 
   return (
     <form onSubmit={submit} noValidate className="d-grid gap-3">
+      {mode === 'login' && DEV_ACCOUNTS.length > 0 && (
+        <div className="d-flex flex-wrap align-items-center gap-2" aria-label="개발용 빠른 입력">
+          <span style={{ fontSize: 'var(--fs-xs)', color: 'var(--color-text-muted)' }}>DEV 빠른 입력</span>
+          {DEV_ACCOUNTS.map((a) => (
+            <button key={a.label} type="button" className="px-chip" onClick={() => fillDevAccount(a)}>
+              {a.label}
+            </button>
+          ))}
+        </div>
+      )}
       {field('email', '이메일', 'email', { autoComplete: 'email', placeholder: 'seller@example.com', 'data-autofocus': true })}
       {mode === 'signup' && field('nickname', '닉네임', 'text', { autoComplete: 'nickname', placeholder: '스토어 이름 또는 닉네임' })}
       {field('password', '비밀번호', 'password', {
