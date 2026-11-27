@@ -1,3 +1,5 @@
+import logoWhite from '../../assets/brand/logo-white.png';
+import logoDark from '../../assets/brand/logo-dark.png';
 import Button from './Button';
 import Icon from './Icon';
 
@@ -96,24 +98,11 @@ export function WaveLoader({ text = '이미지 생성중...', sub }) {
   );
 }
 
-export function Logo({ className = '' }) {
+/** 원본 시안 로고 이미지 (어두운 배경: white, 밝은 배경: dark) */
+export function Logo({ className = '', variant = 'white', height = 26 }) {
   return (
     <span className={`px-logo ${className}`}>
-      <svg className="px-logo__mark" viewBox="0 0 64 64" aria-hidden="true">
-        <defs>
-          <linearGradient id="px-logo-g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="var(--brand-orange)" />
-            <stop offset=".35" stopColor="var(--brand-pink)" />
-            <stop offset=".7" stopColor="var(--brand-blue)" />
-            <stop offset="1" stopColor="var(--brand-mint)" />
-          </linearGradient>
-        </defs>
-        <rect x="6" y="6" width="22" height="22" rx="6" fill="url(#px-logo-g)" />
-        <rect x="36" y="6" width="22" height="22" rx="6" fill="url(#px-logo-g)" opacity=".7" />
-        <rect x="6" y="36" width="22" height="22" rx="6" fill="url(#px-logo-g)" opacity=".45" />
-        <rect x="36" y="36" width="22" height="22" rx="11" fill="url(#px-logo-g)" />
-      </svg>
-      Pixely
+      <img src={variant === 'dark' ? logoDark : logoWhite} alt="Pixely" height={height} style={{ height, width: 'auto' }} />
     </span>
   );
 }

@@ -7,7 +7,14 @@ import BeforeAfterSlider from '../components/home/BeforeAfterSlider';
 import { useCountUp } from '../hooks/useCountUp';
 import { useParallax } from '../hooks/useParallax';
 import { useSamplePairs } from '../hooks/useSamplePairs';
+import Modal from '../components/common/Modal';
+import aiVisual from '../assets/brand/ai-visual.png';
+import robot from '../assets/brand/robot.png';
 import '../styles/home.css';
+
+// 원본 템플릿의 히어로 배경 영상 자리. _legacy/video 의 mp4 를 frontend/public/videos/ 에 복사하고
+// 루트 .env 에 VITE_HERO_VIDEO=/videos/hero.mp4 를 지정하면 재생된다 (영상은 커밋하지 않음).
+const HERO_VIDEO = import.meta.env.VITE_HERO_VIDEO || '';
 
 const PLATFORMS = ['쿠팡', '올리브영', '11번가', 'G마켓', '컬리', '스마트스토어', '옥션', 'SSG'];
 
@@ -88,6 +95,7 @@ function HeroVisual({ pairs }) {
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [videoOpen, setVideoOpen] = useState(false);
   const { pairs, error } = useSamplePairs(4);
   const orbA = useParallax(0.25);
   const orbB = useParallax(-0.12);
@@ -96,6 +104,11 @@ export default function HomePage() {
     <div className="home">
       {/* HERO */}
       <section className="hero section-dark">
+        {HERO_VIDEO ? (
+          <video className="hero__video" src={HERO_VIDEO} autoPlay muted loop playsInline aria-hidden="true" />
+        ) : (
+          <img className="hero__visual-bg" src={aiVisual} alt="" aria-hidden="true" />
+        )}
         <div className="hero__orb hero__orb--a" ref={orbA} aria-hidden="true" />
         <div className="hero__orb hero__orb--b" ref={orbB} aria-hidden="true" />
         <div className="container-px hero__inner">
@@ -115,6 +128,11 @@ export default function HomePage() {
               <Button variant="gradient" size="lg" onClick={() => document.getElementById('how')?.scrollIntoView()}>
                 사용법 보기
               </Button>
+              {HERO_VIDEO && (
+                <Button variant="ghost" size="lg" icon="external" onClick={() => setVideoOpen(true)}>
+                  소개 영상
+                </Button>
+              )}
             </div>
             <p className="hero__note" data-aos="fade-up" data-aos-delay="200">
               <Icon name="check" size={16} /> 로그인 없이 스튜디오 둘러보기 <Icon name="check" size={16} /> 필터 6종 · PNG 다운로드
@@ -214,12 +232,19 @@ export default function HomePage() {
       <section className="section section-dark section--tight">
         <div className="container-px">
           <div className="cta-banner" data-aos="zoom-in">
+            <img className="cta-banner__robot" src={robot} alt="" aria-hidden="true" />
             <h2>지금 첫 광고 컷을 만들어 보세요</h2>
             <p>가입은 30초, 샘플 이미지로 바로 시작할 수 있어요.</p>
             <Button variant="primary" size="lg" iconRight="arrowRight" onClick={() => navigate('/studio')}>스튜디오 열기</Button>
           </div>
         </div>
       </section>
+
+      {HERO_VIDEO && (
+        <Modal open={videoOpen} onClose={() => setVideoOpen(false)} size="lg" title="Pixely 소개 영상">
+          <video className="video-modal" src={HERO_VIDEO} controls autoPlay playsInline />
+        </Modal>
+      )}
     </div>
   );
 }

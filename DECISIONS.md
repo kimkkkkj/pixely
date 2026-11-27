@@ -40,3 +40,10 @@
 - Java: Gradle toolchain 17 + foojay resolver로 JDK 17을 자동 다운로드. Gradle을 실행할 JVM은 따로 필요해서, `gradlew.bat`에 JAVA_HOME/PATH가 없으면 `~/.jdks`, Adoptium, Oracle, Microsoft, Corretto, Zulu 설치 폴더에서 JDK를 찾는 fallback을 추가 (wrapper를 업그레이드하면 다시 넣어야 함).
 - Gradle 8.14.3은 Java 24까지만 실행 가능 → fallback은 폴더 이름순으로 마지막 JDK를 고르는데, 이 PC에서는 temurin-24가 선택됨.
 - IntelliJ 기본 템플릿 `src/Main.java`, `pixely.iml`은 Pixely와 무관해서 삭제. `.idea/`는 IDE 로컬 설정이라 그대로 두고 gitignore 유지.
+- 원본의 "연예인 이미지" 탭 이름은 "모델 이미지"로 유지 (실존 인물 사용을 전제하지 않음).
+- 원본은 슬롯이 차 있으면 alert로 선택을 막았지만, 클릭 한 번으로 교체하고 토스트로 알리는 편이 덜 번거로워 의도적으로 다르게 유지.
+- 원본 필터 타일은 선택된 타일의 글자를 숨기지만, 무엇을 선택했는지 알 수 있도록 선택 타일 하단에 작은 라벨과 체크 표시를 둠.
+- 헤더 알림 아이콘(`alram*.png`)은 알림 기능이 없어 가짜 UI가 되므로 넣지 않음.
+- 템플릿의 testimonial(후기)은 실제 후기가 없어 꾸며낸 후기가 될 수 있어 넣지 않고 비포/애프터 슬라이더로 대체. pricing·contact도 정책 정보가 없어 미반영.
+- 토스트 위치는 스튜디오의 상단 버튼(우측)과 필터·생성 버튼(하단)을 피해 상단 중앙으로.
+- `robot.png`(605KB)는 360px로 줄여 약 145KB로 커밋.

@@ -14,8 +14,26 @@
 
   --gradient-brand: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-pink) 34%, var(--brand-blue) 68%, var(--brand-mint) 100%);
   --gradient-brand-diag: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-pink) 34%, var(--brand-blue) 68%, var(--brand-mint) 100%);
-  --gradient-button: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-deep) 100%);
-  --gradient-button-hover: linear-gradient(135deg, #4A98FF 0%, var(--brand-blue-strong) 100%);
+  /* 원본 시안 로고 마크 / "이미지 생성하기" 버튼의 보라→파랑 그라데이션 */
+  --brand-violet: #574CE3;
+  --brand-azure: #2E8CF0;
+  --gradient-button: linear-gradient(to right, var(--brand-violet) 0%, var(--brand-azure) 51%, var(--brand-violet) 100%);
+  --gradient-button-size: 200% auto;
+  --gradient-brand-animated: linear-gradient(-45deg, var(--brand-orange), var(--brand-pink), var(--brand-blue), var(--brand-mint));
+
+  /* 원본 시안 로딩 볼 5색 (green → teal → cyan → blue → purple) */
+  --loader-1: #37BF57;
+  --loader-2: #49CAA1;
+  --loader-3: #12AAB4;
+  --loader-4: #2C88C1;
+  --loader-5: #6B45B1;
+
+  /* 원본 시안 상단 버튼: 공유하기(차분한 블루) / 다운로드(선명한 블루) */
+  --color-share-bg: #3C6593;
+  --color-share-bg-hover: #4A76A8;
+  --color-share-text: #E4ECF5;
+  --color-download-bg: #0377FF;
+  --color-download-bg-hover: #2A8CFF;
 
   /* ---------- Dark surfaces (기본 테마) ---------- */
   --color-bg: #05060B;
@@ -90,6 +108,7 @@
   --shadow-light: 0 12px 32px rgba(17, 24, 39, 0.08);
   --shadow-glow-blue: 0 8px 28px rgba(51, 138, 255, 0.35);
   --shadow-glow-pink: 0 8px 28px rgba(255, 61, 119, 0.30);
+  --shadow-glow-violet: 0 8px 28px rgba(87, 76, 227, 0.35);
   --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--brand-blue);
 
   /* ---------- Typography ---------- */

@@ -4,6 +4,7 @@ import { selectIsAdmin, useAuthStore } from '../../store/authStore';
 import { toast } from '../../store/uiStore';
 import Button from '../common/Button';
 import { Logo } from '../common/Display';
+import avatarDefault from '../../assets/brand/avatar-default.png';
 
 /** 상단 내비게이션 + 모바일 메뉴 (기존 navbar.js 대체) */
 export default function Navbar() {
@@ -40,7 +41,10 @@ export default function Navbar() {
 
   const actions = user ? (
     <>
-      <span className="px-nav__user">{user.nickname}님</span>
+      <span className="px-nav__user">
+        <img src={avatarDefault} alt="" className="px-nav__avatar" width={32} height={32} />
+        {user.nickname}
+      </span>
       <Button variant="ghost" size="sm" icon="logout" onClick={handleLogout}>로그아웃</Button>
     </>
   ) : (

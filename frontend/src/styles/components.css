@@ -20,8 +20,20 @@
 .px-btn--block { width: 100%; }
 .px-btn--icon { width: var(--btn-h); padding: 0; }
 
-.px-btn--primary { background: var(--gradient-button); color: var(--color-white); box-shadow: var(--shadow-glow-blue); }
-.px-btn--primary:hover:not(:disabled) { background: var(--gradient-button-hover); }
+/* 원본 시안 버튼: 보라-파랑-보라 그라데이션, hover 시 배경 위치 이동 */
+.px-btn--primary {
+  background-image: var(--gradient-button); background-size: var(--gradient-button-size); background-position: left center;
+  color: var(--color-white); box-shadow: var(--shadow-glow-violet);
+  transition: background-position 0.5s var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-base), opacity var(--duration-base);
+}
+.px-btn--primary:hover:not(:disabled) { background-position: right center; }
+.px-btn--xl { --btn-h: 60px; padding: 0 var(--space-6); font-size: var(--fs-md); border-radius: var(--radius-md); }
+
+/* 원본 시안 상단 버튼 (공유하기 / 다운로드) */
+.px-btn--share { background: var(--color-share-bg); color: var(--color-share-text); }
+.px-btn--share:hover:not(:disabled) { background: var(--color-share-bg-hover); }
+.px-btn--download { background: var(--color-download-bg); color: var(--color-white); }
+.px-btn--download:hover:not(:disabled) { background: var(--color-download-bg-hover); }
 
 .px-btn--gradient { position: relative; background: var(--color-bg); color: var(--color-text); border: 0; z-index: 0; }
 .px-btn--gradient::before {
@@ -98,6 +110,10 @@
 .px-search { position: relative; }
 .px-search svg { position: absolute; left: var(--space-3); top: 50%; transform: translateY(-50%); color: var(--color-text-subtle); pointer-events: none; }
 .px-search .px-input { padding-left: var(--space-10); height: 40px; padding-top: 0; padding-bottom: 0; }
+/* 원본 시안 검색창: 검정 pill + 우측 돋보기 */
+.px-search--pill svg { left: auto; right: var(--space-4); }
+.px-search--pill .px-input { padding-left: var(--space-5); padding-right: var(--space-10); border-radius: var(--radius-pill); background: var(--color-bg); border-color: transparent; }
+.px-search--pill .px-input:focus { border-color: var(--brand-violet); box-shadow: 0 0 0 3px var(--color-primary-soft); }
 
 /* ===================== Tabs ===================== */
 .px-tabs {
@@ -164,7 +180,8 @@
 
 /* ===================== Toast ===================== */
 .px-toast-viewport {
-  position: fixed; z-index: var(--z-toast); right: var(--space-6); top: calc(var(--navbar-height) + var(--space-3));
+  /* 상단 중앙: 스튜디오 우측 상단(공유/다운로드)과 하단(필터·생성 버튼)을 가리지 않는 위치 */
+  position: fixed; z-index: var(--z-toast); left: 50%; transform: translateX(-50%); top: calc(var(--navbar-height) + var(--space-3));
   display: flex; flex-direction: column; gap: var(--space-2); width: min(calc(100% - var(--space-8)), 420px);
   pointer-events: none;
 }
@@ -199,7 +216,8 @@
 .px-nav__link:hover { color: var(--color-text); background: var(--color-white-a10); }
 .px-nav__link.active { color: var(--color-text); }
 .px-nav__actions { display: flex; align-items: center; gap: var(--space-2); }
-.px-nav__user { font-size: var(--fs-sm); color: var(--color-text-muted); }
+.px-nav__user { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--fs-sm); color: var(--color-text); font-weight: var(--fw-medium); }
+.px-nav__avatar { width: 32px; height: 32px; border-radius: 50%; }
 .px-nav__toggle { display: none; }
 .px-nav__mobile { display: none; }
 
@@ -225,25 +243,27 @@
 .px-footer__bottom { margin-top: var(--space-10); padding-top: var(--space-6); border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; color: var(--color-text-subtle); }
 @media (max-width: 767px) { .px-footer__grid { grid-template-columns: 1fr; } }
 
-/* ===================== Wave loader (5색 웨이브 볼) ===================== */
-.px-wave { display: flex; flex-direction: column; align-items: center; gap: var(--space-5); }
-.px-wave__balls { display: flex; gap: var(--space-2); height: 48px; align-items: center; }
-.px-wave__ball { width: 14px; height: 14px; border-radius: 50%; animation: px-wave 1.2s var(--ease-out) infinite; }
-.px-wave__ball:nth-child(1) { background: var(--brand-orange); animation-delay: 0s; }
-.px-wave__ball:nth-child(2) { background: var(--brand-pink); animation-delay: 0.1s; }
-.px-wave__ball:nth-child(3) { background: var(--brand-blue); animation-delay: 0.2s; }
-.px-wave__ball:nth-child(4) { background: var(--brand-mint); animation-delay: 0.3s; }
-.px-wave__ball:nth-child(5) { background: var(--color-white); animation-delay: 0.4s; }
+/* ===================== Wave loader (원본 시안: 5색 웨이브 볼 + 그라데이션 "이미지 생성중...") ===================== */
+.px-wave { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+.px-wave__balls { display: grid; grid-template-columns: repeat(5, 8px); gap: 9px; height: 64px; align-items: center; justify-content: center; }
+.px-wave__ball { width: 8px; height: 8px; border-radius: 50%; animation: px-wave 1.5s ease-in-out infinite; background: var(--loader-1); }
+.px-wave__ball:nth-child(2) { animation-delay: -0.2s; background: var(--loader-2); }
+.px-wave__ball:nth-child(3) { animation-delay: -0.4s; background: var(--loader-3); }
+.px-wave__ball:nth-child(4) { animation-delay: -0.6s; background: var(--loader-4); }
+.px-wave__ball:nth-child(5) { animation-delay: -0.8s; background: var(--loader-5); }
 @keyframes px-wave {
-  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
-  35% { transform: translateY(-18px) scale(1.12); opacity: 1; }
-  70% { transform: translateY(4px) scale(0.92); }
+  0%, 100% { transform: translateY(20px); }
+  50% { transform: translateY(-20px); }
 }
 .px-wave__text {
-  font-size: var(--fs-lg); font-weight: var(--fw-black); letter-spacing: var(--ls-tight);
-  background: var(--gradient-brand); background-size: 200% auto;
+  font-size: 17px; font-weight: var(--fw-bold); text-align: center;
+  background: var(--gradient-brand-animated); background-size: 300% 300%;
   -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: px-gradient-move 2.4s linear infinite;
+  animation: px-gradient-move 3s ease infinite;
 }
 .px-wave__sub { font-size: var(--fs-sm); color: var(--color-text-muted); }
-@keyframes px-gradient-move { to { background-position: 200% center; } }
+@keyframes px-gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

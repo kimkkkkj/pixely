@@ -106,6 +106,7 @@ export default function StudioPage() {
     [setTab, compact],
   );
 
+  const canUseResult = generation?.status === 'DONE' && filtered.ready;
   const resultActions = {
     sharing: actions.sharing,
     downloading: actions.downloading,
@@ -120,7 +121,12 @@ export default function StudioPage() {
           <LibraryPanel stepLabel={compact ? '1' : null} />
         </div>
         <div className="studio__area studio__area--slots">
-          <SlotsCard stepLabel={compact ? '1' : null} onEmptyClick={handleEmptySlot} />
+          <SlotsCard
+            stepLabel={compact ? '1' : null}
+            onEmptyClick={handleEmptySlot}
+            actions={compact ? null : resultActions}
+            actionsEnabled={canUseResult}
+          />
         </div>
         <div className="studio__area studio__area--prompt">
           <PromptCard stepLabel={compact ? '2' : null} onGenerate={handleGenerate} generating={isGenerating} />
@@ -134,6 +140,7 @@ export default function StudioPage() {
             filtered={filtered}
             onRetry={handleGenerate}
             actions={resultActions}
+            showActions={compact}
           />
         </div>
       </div>

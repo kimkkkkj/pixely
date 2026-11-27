@@ -85,6 +85,15 @@ export default function LibraryPanel({ stepLabel }) {
     [lib, product, model, clearSlot],
   );
 
+  // 원본 시안은 슬롯이 차 있으면 선택을 막았지만, 여기서는 교체하고 안내만 한다
+  const handleSelect = (image) => {
+    const current = image.type === IMAGE_TYPES.PRODUCT ? product : model;
+    if (current && current.id !== image.id) {
+      toast.info(`${image.type === IMAGE_TYPES.PRODUCT ? '상품' : '모델'} 이미지를 "${image.title}"(으)로 바꿨어요.`);
+    }
+    select(image);
+  };
+
   const handleUpload = async (payload) => {
     const created = await libraryApi.upload(payload);
     toast.success('업로드했어요. 바로 선택해 두었어요.');
@@ -110,16 +119,16 @@ export default function LibraryPanel({ stepLabel }) {
 
       <div className="studio-lib__controls">
         <Tabs tabs={TABS} value={tab} onChange={setTab} label="이미지 종류" idPrefix="lib-tab" />
-        <div className="px-search">
-          <Icon name="search" size={16} />
+        <div className="px-search px-search--pill">
           <input
             className="px-input"
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={tab === IMAGE_TYPES.PRODUCT ? '상품명, 태그 검색' : '모델명, 스타일 검색'}
-            aria-label="이미지 검색"
+            placeholder="찾으시는 목록이 있으신가요?"
+            aria-label={tab === IMAGE_TYPES.PRODUCT ? '상품 이미지 검색 (이름, 태그)' : '모델 이미지 검색 (이름, 스타일)'}
           />
+          <Icon name="search" size={16} />
         </div>
         <p className="studio-lib__meta" aria-live="polite">
           {lib.total != null ? `${lib.total.toLocaleString('ko-KR')}개` : ' '}
@@ -140,7 +149,7 @@ export default function LibraryPanel({ stepLabel }) {
         ) : (
           <div className="lib-grid">
             {lib.items.map((image) => (
-              <GridItem key={image.id} image={image} selected={selectedId === image.id} onSelect={select} onDelete={handleDelete} />
+              <GridItem key={image.id} image={image} selected={selectedId === image.id} onSelect={handleSelect} onDelete={handleDelete} />
             ))}
             {lib.loading &&
               Array.from({ length: lib.items.length ? 2 : 8 }, (_, i) => (

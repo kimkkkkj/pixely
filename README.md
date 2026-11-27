@@ -134,7 +134,10 @@ erDiagram
 ## 4. 실행 방법 (Windows PowerShell)
 
 ### 사전 요구사항
-- **JDK 17 이상**: 이 PC에는 `java`가 PATH에 없고 IntelliJ가 받은 `~/.jdks/temurin-24.0.2`가 있습니다. 아래처럼 현재 세션에만 지정하면 됩니다. JDK가 없다면 [Temurin 17](https://adoptium.net/)을 설치하세요. (빌드는 `options.release = 17`이라 어떤 JDK 17+ 버전이든 Java 17 바이트코드로 컴파일됩니다.)
+- **JDK 17~24 중 하나 설치** (JAVA_HOME 설정은 필요 없음)
+  - `gradlew.bat`은 JAVA_HOME이나 PATH에 java가 없으면 `%USERPROFILE%\.jdks`(IntelliJ), `Program Files\Eclipse Adoptium`, `Java`, `Microsoft`, `Amazon Corretto`, `Zulu`에서 JDK를 자동으로 찾아 Gradle을 실행합니다.
+  - 컴파일·테스트·실행은 Gradle **toolchain Java 17**을 쓰고, PC에 JDK 17이 없으면 Gradle이 처음 한 번 자동으로 내려받습니다 (`~/.gradle/jdks`, foojay).
+  - JDK가 하나도 없다면 [Temurin 17](https://adoptium.net/temurin/releases/?version=17)을 설치하세요. Gradle 8.14가 Java 25 이상에서는 실행되지 않으니, JDK가 여러 개라면 `$env:JAVA_HOME`으로 17~24 중 하나를 지정하세요.
 - Node.js 18 이상 (확인 버전: v24)
 - (선택) Python 3.10 이상: ai-server 실행용
 - (선택) Docker Desktop: MySQL 컨테이너용
@@ -150,13 +153,12 @@ $b = New-Object byte[] 48; [Security.Cryptography.RandomNumberGenerator]::Create
 ### 2) 백엔드 (포트 8081)
 ```powershell
 cd backend
-$env:JAVA_HOME = "$env:USERPROFILE\.jdks\temurin-24.0.2"   # 설치된 JDK 경로로 바꾸세요
-$env:Path = "$env:JAVA_HOME\bin;$env:Path"
 .\gradlew.bat bootRun
 ```
 처음 실행하면 다음이 자동으로 처리됩니다.
 - 관리자 계정 `admin@pixely.com` 생성 (비밀번호는 `.env`의 `ADMIN_PASSWORD`)
-- 공용 샘플 시드: `_legacy/service-images/tab1`(상품)과 `tab2`(모델)가 있으면 그 이미지를 쓰고, 없으면 코드로 그린 상품 8장과 **가상 모델** 8장을 생성 (실존 인물이 아니라 초상권 문제 없음)
+- 공용 샘플 시드: 상품 14장은 원본 시안의 상품 이미지(`backend/src/main/resources/seed/products`), 모델 8장은 코드로 그린 **가상 모델**입니다. 원본의 인물 사진(`service-images/tab2`)은 초상권 문제로 사용하지 않습니다.
+- 시드는 공용 샘플이 없을 때만 실행됩니다. 처음부터 다시 받으려면 백엔드를 끄고 `Remove-Item -Recurse backend\data, backend\uploads`를 실행하세요.
 - H2 DB 파일 `backend/data/`, 업로드 폴더 `backend/uploads/`
 
 ### 3) 프론트엔드 (포트 5174)
@@ -196,7 +198,6 @@ cd frontend; npm run lint; npm run build
 | `CORS_ALLOWED_ORIGINS` | http://localhost:5174,… | 허용 Origin (쉼표 구분) |
 | `PUBLIC_BASE_URL` | http://localhost:5174 | 공유 링크 앞부분 |
 | `UPLOAD_DIR` | ./uploads | 로컬 파일 저장 위치 (backend 기준) |
-| `LEGACY_IMAGES_DIR` | ../_legacy/service-images | 샘플 시드 원본 폴더 |
 | `AI_PROVIDER` | mock | `mock` · `openai` · `fastapi` |
 | `AI_TIMEOUT_SECONDS` | 60 | 생성 타임아웃 |
 | `GENERATION_RATE_LIMIT_PER_MINUTE` | 5 | 사용자별 분당 생성 횟수 |
@@ -205,6 +206,7 @@ cd frontend; npm run lint; npm run build
 | `FASTAPI_URL` | http://localhost:8000 | ai-server 주소 |
 | `AI_ENGINE` (ai-server) | mock | `mock` · `comfyui` |
 | `COMFYUI_URL` / `COMFYUI_WORKFLOW` (ai-server) | - | ComfyUI 주소, API 포맷 워크플로우 JSON 경로 |
+| `VITE_HERO_VIDEO` (frontend) | (빈 값) | 메인 히어로 배경 영상 경로. 비어 있으면 AI 웨이브 이미지를 표시 |
 
 비밀값은 모두 `.env`에서 읽고, `.env`는 `.gitignore`에 들어 있습니다. OS 환경변수가 `.env`보다 우선합니다.
 
@@ -220,7 +222,7 @@ cd frontend; npm run lint; npm run build
 
 ## 7. MySQL로 전환
 
-이 PC에서는 로컬 MySQL80이 3306에서 실행 중이고 Docker는 설치되어 있지 않습니다. root 비밀번호를 알 수 없어서 개발 기본 DB는 H2 파일 DB(MySQL 모드)로 두었습니다.
+**현재 개발 기본 DB는 H2 파일 DB(MySQL 모드)입니다.** 이 PC에는 로컬 MySQL80이 3306에서 실행 중이지만, `.env`에 있는 접속 정보(`pixely`, `MYSQL_ROOT_PASSWORD`의 root, H2용 `sa`)가 모두 `ERROR 1045 (28000): Access denied`로 거부되어 DB와 계정을 만들 수 없었습니다. Docker도 설치되어 있지 않습니다. 실제 root 비밀번호를 알고 있다면 아래 방법으로 전환하세요. 테스트는 항상 H2 test 프로필로 실행됩니다.
 
 **A. 로컬 MySQL(3306) 사용**
 ```powershell
@@ -239,7 +241,18 @@ docker compose --env-file .env up -d
 ```
 테이블은 JPA `ddl-auto=update`가 자동으로 생성합니다.
 
-## 8. 화면
+## 8. 메인 히어로 영상 넣기 (선택)
+
+원본 템플릿의 배경 영상(`_legacy/video/*.mp4`, 약 300MB)은 저장소에 넣지 않습니다. 로컬에서 쓰려면:
+```powershell
+New-Item -ItemType Directory -Force frontend\public\videos
+Copy-Item _legacy\video\bg1.mp4 frontend\public\videos\hero.mp4   # frontend/public/videos/ 는 .gitignore 대상
+Add-Content .env "VITE_HERO_VIDEO=/videos/hero.mp4"
+# 프론트 dev 서버 재시작 → 히어로 배경 영상 재생 + "소개 영상" 버튼(모달) 표시
+```
+배포 환경에서는 CDN에 올린 영상 URL을 `VITE_HERO_VIDEO`에 넣으면 됩니다.
+
+## 9. 화면
 
 | 경로 | 화면 |
 |---|---|
@@ -250,7 +263,7 @@ docker compose --env-file .env up -d
 | `/login`, `/signup` | 인증 |
 | `/admin` | 공용 샘플 업로드·삭제, 전체 생성 내역 표(상태 필터, 페이지네이션) |
 
-## 9. 기존 시안(service.html) 대비 개선점
+## 10. 기존 시안(service.html) 대비 개선점
 
 | 기존 문제 | 개선 |
 |---|---|
@@ -267,7 +280,9 @@ docker compose --env-file .env up -d
 | 빈/로딩/에러 상태 없음 | EmptyState, Skeleton(shimmer), ErrorState(다시 시도) 전 화면 적용 |
 | 접근성 부족 | aria-label, `:focus-visible` 링, alt 텍스트, skip link, aria-live 상태 안내, reduced-motion 대응 |
 
-## 10. 폴더 구조
+원본의 아이덴티티는 그대로 살렸습니다: 원본 로고·파비콘, 보라→파랑 버튼 그라데이션(hover 시 이동), 5색 웨이브 볼 로딩(원본 색·크기·타이밍), 검정 pill 검색창과 문구, 우측 상단 공유하기/다운로드 반반 버튼, "OO 이미지를 넣어주세요" 슬롯, 포커스 시 움직이는 그라데이션 테두리의 요청사항 입력창, "필터적용" 정사각 타일 바. 원본과의 상세 비교는 `PROGRESS.md`에 있습니다.
+
+## 11. 폴더 구조
 
 ```
 pixely/
@@ -276,16 +291,14 @@ pixely/
 ├─ ai-server/          FastAPI (main.py, compose.py=Pillow mock, comfyui.py)
 ├─ db/init.sql         MySQL DB/계정 생성
 ├─ docker-compose.yml  MySQL 8 (utf8mb4, 호스트 3307)
-├─ _legacy/            원본 보관 (이번 작업 시점에는 비어 있었음)
+├─ _legacy/            원본 시안 보관 (로컬 전용, .gitignore — 인물 사진·영상 포함)
 ├─ PROGRESS.md / DECISIONS.md
 └─ .env.example
 ```
 
-## 11. Git
+## 12. Git
 
 ```powershell
 git remote -v                 # origin https://github.com/kimkkkkj/pixely.git
 git push -u origin main       # 인증이 필요하면 GitHub 로그인 / PAT 사용
 ```
-
-> **push 상태**: 자동 `git push -u origin main`은 `remote: Repository not found`로 실패했습니다. GitHub에 `kimkkkkj/pixely` 저장소를 (빈 저장소로) 만들고 로그인한 뒤, 루트에서 `git push -u origin main`을 실행하세요.

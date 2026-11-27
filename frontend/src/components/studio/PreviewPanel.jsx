@@ -2,20 +2,21 @@ import { useRef } from 'react';
 import { FILTERS } from '../../lib/filters';
 import { STATUS_LABEL } from '../../lib/format';
 import { useDragScroll } from '../../hooks/useDragScroll';
-import Button from '../common/Button';
 import Icon from '../common/Icon';
-import { EmptyState, ErrorState, Skeleton, StatusBadge, WaveLoader } from '../common/Display';
+import { ErrorState, Skeleton, StatusBadge, WaveLoader } from '../common/Display';
+import { ResultActions } from './SelectionPanel';
 
+/** 원본 시안 필터 바: "필터적용" + 정사각 타일, 선택되지 않은 타일은 어둡게, 이름은 타일 위에 */
 function FilterStrip({ enabled, thumbs, value, onChange }) {
   const ref = useRef(null);
   useDragScroll(ref, { axis: 'x' });
   return (
     <div className="filter-strip-wrap">
       <div className="filter-strip__head">
-        <span className="filter-strip__title"><Icon name="filter" size={16} /> 분위기 필터</span>
+        <span className="filter-strip__title">필터적용</span>
         {!enabled && <span className="filter-strip__hint"><Icon name="lock" size={13} /> 이미지 생성 후 사용할 수 있어요</span>}
       </div>
-      <div ref={ref} className="filter-strip thin-scroll" role="radiogroup" aria-label="분위기 필터">
+      <div ref={ref} className="filter-strip" role="radiogroup" aria-label="분위기 필터">
         {FILTERS.map((f) => {
           const active = enabled && value === f.type;
           return (
@@ -24,20 +25,18 @@ function FilterStrip({ enabled, thumbs, value, onChange }) {
               type="button"
               role="radio"
               aria-checked={active}
-              className={`filter-chip ${active ? 'is-active' : ''}`}
+              aria-label={`${f.label} 필터`}
+              className={`filter-tile ${active ? 'is-active' : ''}`}
               disabled={!enabled}
               onClick={() => onChange(f.type)}
             >
-              <span className="filter-chip__thumb">
-                {enabled && thumbs[f.type] ? (
-                  <img src={thumbs[f.type]} alt="" draggable="false" />
-                ) : enabled ? (
-                  <Skeleton height="100%" radius="inherit" />
-                ) : (
-                  <span className={`filter-chip__placeholder filter-chip__placeholder--${f.type.toLowerCase()}`} />
-                )}
-              </span>
-              <span className="filter-chip__label">{f.label}</span>
+              {enabled && thumbs[f.type] ? (
+                <img src={thumbs[f.type]} alt="" draggable="false" />
+              ) : enabled ? (
+                <Skeleton height="100%" radius="inherit" className="filter-tile__sk" />
+              ) : null}
+              <span className="filter-tile__label">{enabled ? f.label : '필터 없음'}</span>
+              {active && <span className="filter-tile__check" aria-hidden="true"><Icon name="check" size={12} strokeWidth={3} /></span>}
             </button>
           );
         })}
@@ -46,7 +45,7 @@ function FilterStrip({ enabled, thumbs, value, onChange }) {
   );
 }
 
-export default function PreviewPanel({ stepLabel, generation, filter, setFilter, filtered, onRetry, actions }) {
+export default function PreviewPanel({ stepLabel, generation, filter, setFilter, filtered, onRetry, actions, showActions }) {
   const status = generation?.status;
   const isGenerating = status === 'PENDING' || status === 'PROCESSING';
   const isDone = status === 'DONE';
@@ -55,7 +54,7 @@ export default function PreviewPanel({ stepLabel, generation, filter, setFilter,
 
   let body;
   if (isGenerating) {
-    body = <WaveLoader sub={status === 'PENDING' ? '요청을 접수했어요' : 'AI가 두 이미지를 합성하고 있어요 · 잠시만 기다려 주세요'} />;
+    body = <WaveLoader sub={status === 'PENDING' ? '요청을 접수했어요' : 'AI가 두 이미지를 합성하고 있어요'} />;
   } else if (isFailed) {
     body = (
       <ErrorState
@@ -74,11 +73,10 @@ export default function PreviewPanel({ stepLabel, generation, filter, setFilter,
     );
   } else {
     body = (
-      <EmptyState
-        icon="sparkles"
-        title="여기에 광고 이미지가 표시돼요"
-        description="상품과 모델 이미지를 고르고, 요청사항을 적은 뒤 '이미지 생성하기'를 눌러 주세요."
-      />
+      <p className="preview__placeholder">
+        이미지 생성하기 <br />
+        버튼을 눌러주세요.
+      </p>
     );
   }
 
@@ -90,30 +88,7 @@ export default function PreviewPanel({ stepLabel, generation, filter, setFilter,
           결과 미리보기
           {status && <StatusBadge status={status}>{STATUS_LABEL[status]}</StatusBadge>}
         </h2>
-        <div className="studio-preview__actions">
-          <Button
-            size="sm"
-            variant="outline"
-            icon="share"
-            disabled={!canUseResult}
-            loading={actions.sharing}
-            onClick={actions.onShare}
-            aria-label="공유하기"
-          >
-            <span className="hide-xs">공유하기</span>
-          </Button>
-          <Button
-            size="sm"
-            variant="primary"
-            icon="download"
-            disabled={!canUseResult}
-            loading={actions.downloading}
-            onClick={actions.onDownload}
-            aria-label="다운로드"
-          >
-            <span className="hide-xs">다운로드</span>
-          </Button>
-        </div>
+        {showActions && <ResultActions actions={actions} enabled={canUseResult} compact />}
       </header>
       <div className={`preview ${isDone ? 'is-done' : ''}`} aria-live="polite" aria-busy={isGenerating}>
         {body}

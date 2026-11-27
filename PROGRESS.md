@@ -67,3 +67,63 @@
 - [x] 3개 provider 구현, AI_PROVIDER 로 전환
 - [x] 반응형 1440/1024/768/390 확인, alert/confirm 미사용
 - [ ] git push — 실패: `remote: Repository not found` (원격 저장소 미생성 또는 접근 권한 없음). 저장소 생성/로그인 후 `git push -u origin main` 수동 실행 필요
+
+---
+
+# 2차 작업: _legacy 원본 반영
+
+## 0) `_legacy` 구성 확인
+| 경로 | 내용 | 처리 |
+|---|---|---|
+| `service.html` | 스튜디오 시안 (1158줄, 인라인 CSS/JS) | 레이아웃·문구·상호작용 비교 후 반영 |
+| `css/` | bootstrap*, aos, glightbox, tiny-slider, `style.css`(템플릿: hero, feature, service, section-counter, testimonial, pricing, contact/subscribe, playvid, footer, loader) | 메인 섹션 구성 점검 기준 |
+| `js/` | aos, bootstrap.bundle, counter, custom(AOS·Rellax·preloader·countdown·tiny-slider·GLightbox), navbar(모바일 메뉴), rellax, tiny-slider, glightbox | 이미 React 훅/컴포넌트로 이식됨 |
+| `images/` | `main_logo.png`(흰 글자), `main_logo_b.png`(검은 글자), `pa.png`(로고 마크), `main-ai-visual-2.png`(AI 웨이브) | 로고 2종·웨이브 비주얼 → `frontend/src/assets/brand` |
+| `pavi/` | 파비콘·앱 아이콘 세트, manifest | favicon.ico, 16/32/96, apple 180, android 192 → `frontend/public` |
+| `service-images/` | logo/logo2, alram/alram2, profile, search, robot, `F1~F6.gif`, `tab1`(상품 14), `tab2`(인물 14) | profile → 기본 아바타, robot → CTA 마스코트(360px로 축소), tab1 → 백엔드 상품 시드. **tab2·F*.gif(인물) 미사용** |
+| `video/` | back1·back2·bg1·bg2·bg3.mp4 (총 약 300MB) | 미커밋. `VITE_HERO_VIDEO` 자리만 마련 |
+| 기획서 PDF | **없음** | 비교 불가 (DECISIONS.md) |
+| 메인 원본 `index.html` | **없음** | `style.css` 템플릿 클래스 구조로 대체 점검 |
+
+## 1) 원본 대비 비교
+| 영역 | 원본 시안 | 1차 구현 | 2차 조치 |
+|---|---|---|---|
+| 로고 | `logo2.png` 이미지 (보라→파랑 마크 + PIXELY) | 직접 그린 SVG 4칸 마크 | **원본 로고 이미지로 교체** (다크/라이트 2종), 원본 파비콘·manifest 적용 |
+| 헤더 | 로고 / 알림 아이콘 / 프로필 사진 + 이름 | 로고 / 메뉴 / 닉네임 텍스트 | **프로필 아바타 + 닉네임** 추가. 알림 아이콘은 알림 기능이 없어 미반영 |
+| 주 버튼 색 | `#574CE3 → #2E8CF0 → #574CE3`, hover 시 배경 이동 | 파랑 단색 계열 그라데이션 | **원본 그라데이션 + hover 이동**을 primary 토큰으로 지정 |
+| 탭 | 상품 이미지 / 연예인 이미지 | 상품 이미지 / 모델 이미지 | 구조는 같음. "연예인"은 초상권 문제로 **"모델" 유지** |
+| 검색창 | 검정 pill, 우측 돋보기, "찾으시는 목록이 있으신가요?" | 좌측 아이콘 사각 입력 | **원본 형태·문구로 변경** (+ 디바운스 검색은 유지) |
+| 그리드 | 2열, 드래그 스크롤(첫 그리드만 동작) | 2열, 모든 그리드 드래그 + 무한 스크롤 | 유지 (태블릿에서는 자동 열 수) |
+| 우측 상단 | 공유하기(#3c6593) / 다운로드(#0377FF) 반반 버튼 | 미리보기 헤더 우측의 작은 버튼 | **원본 위치·색으로 이동** (데스크톱 우측 패널 상단, 태블릿 이하는 결과 헤더) |
+| 슬롯 문구 | "상품 이미지를 / 넣어주세요", "연예인 이미지를 / 넣어주세요" | "+ 상품 선택" + 라벨 | **원본 문구** ("모델 이미지를 넣어주세요") |
+| 슬롯 해제 | confirm "이미지를 삭제하시겠어요? Y/N" | 커스텀 모달 "선택을 해제할까요?" | 모달 제목을 **원본 문구**로 |
+| 슬롯 중복 선택 | alert "한 장의 사진만 선택할 수 있습니다." 로 차단 | 조용히 교체 | 교체하고 **토스트로 안내** (차단보다 편해서 의도적으로 다르게 둠) |
+| 요청사항 | "여기에 요청사항을 적어보세요!", 포커스 시 움직이는 그라데이션 테두리 | 일반 textarea | **원본 placeholder + 움직이는 그라데이션 테두리** |
+| 생성 버튼 | 60px, 보라-파랑 그라데이션 | 52px primary | **60px(`xl`) + 원본 그라데이션** |
+| 미리보기 빈 상태 | "이미지 생성하기 / 버튼을 눌러주세요." | 아이콘 + 긴 안내문 | **원본 문구** |
+| 로딩 | 8px 볼 5개(초록→청록→하늘→파랑→보라), ±20px 웨이브 1.5s, -45° 움직이는 그라데이션 텍스트 | 14px 볼, 브랜드 4색 + 흰색 | **원본 크기·색·타이밍**으로 |
+| 필터 바 | "필터적용", 142px 정사각 타일, 텍스트 오버레이, 비선택 어둡게, 스크롤바 숨김, 생성 전 비활성 "필터 없음" | 84px 썸네일 + 아래 라벨 | **원본 구조로** (유동 88~142px, 오버레이 라벨, 비선택 50% 밝기, 생성 전 "필터 없음") |
+| 필터 동작 | GIF를 바꿔 끼우는 가짜 필터 | Canvas 픽셀 필터 | 유지 (원본 결함 해결) |
+| 공유 | 버튼만 있고 동작 없음 | 공유 링크/클립보드/navigator.share | 유지 |
+| 메인 히어로 | 템플릿 hero + 배경 영상(video/) | 그라데이션 orb | **AI 웨이브 비주얼 배경 + `VITE_HERO_VIDEO` 영상 자리 + 소개 영상 모달(playvid)** |
+| feature/service 카드 | 아이콘 카드, hover 시 lift·그라데이션 | 정적 카드 | **hover lift + 상단 그라데이션 바** |
+| counter | `.section-counter` | `useCountUp` | 유지 |
+| testimonial (tiny-slider) | 후기 슬라이더 | 비포/애프터 Swiper | 가짜 후기를 만들지 않으려고 **비포/애프터로 대체 유지** |
+| pricing / contact·subscribe | 템플릿 섹션 | 없음 | **미반영** (요금·문의 정책 정보 없음) |
+| preloader | `.loader` 페이드아웃 | Suspense 로딩 화면 | 유지 |
+| 마스코트 | robot.png (시안에서 미사용) | 없음 | **CTA 배너에 사용** |
+
+## 2) DB
+- [x] `.env` 정보로 로컬 MySQL 3306 접속 시도 → pixely / root / sa 모두 `ERROR 1045 Access denied` → **H2 유지**, README 7장에 원인과 전환 방법
+
+## 3) 정리
+- [x] `src/Main.java`, `pixely.iml` 삭제, `.gitignore`의 `/src/` 규칙 삭제 및 깨진 주석 수정
+- [x] Gradle toolchain 17(foojay 자동 다운로드) + `gradlew.bat` JDK 자동 탐색 → **JAVA_HOME과 PATH에 java가 없는 상태에서 `gradlew build` 성공** 확인
+- [x] 상품 시드 14장(classpath), 가상 모델 8장
+
+## 4) 검증
+- [x] `gradlew clean build` — 테스트 18/18 통과 (H2 test 프로필)
+- [x] `npm run lint` 경고 0, `npm run build` 성공
+- [x] 브라우저 흐름(puppeteer-core + Chrome headless): 회원가입 → 상품/모델 선택 → 생성(mock) → 로맨틱 필터 → 다운로드(`pixely-2-romantic.png`) → 공유 링크 공개 페이지(원본/로맨틱) → 히스토리 → 다시 편집 → 로그인 모달 → 관리자 샘플 업로드(15→16), 콘솔 에러·5xx 0건
+- [x] 1440 / 1024 / 768 / 390 화면 확인
+- 발견·수정: 우측 상단 토스트가 새 공유/다운로드 버튼을 가림 → 토스트를 상단 중앙으로 이동. 태블릿에서 라이브러리 타일·슬롯이 과도하게 커짐 → 자동 열 수 그리드, 슬롯 최대 200px
