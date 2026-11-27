@@ -1,0 +1,48 @@
+# ===== Secrets =====
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ===== Runtime data =====
+uploads/
+**/uploads/
+data/
+**/data/*.db
+*.mv.db
+*.trace.db
+*.log
+
+# ===== Build outputs =====
+build/
+**/build/
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.gradle/
+**/.gradle/
+dist/
+**/dist/
+target/
+
+# ===== Node =====
+node_modules/
+**/node_modules/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ===== IDE / OS =====
+.idea/
+*.iml
+.vscode/
+.kotlin
+.DS_Store
+Thumbs.db
+.claude/settings.local.json
+
+# IntelliJ 기본 템플릿(src/Main.java)은 프로젝트와 무관하므로 제외
+/src/
