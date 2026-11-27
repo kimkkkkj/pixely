@@ -287,3 +287,5 @@ pixely/
 git remote -v                 # origin https://github.com/kimkkkkj/pixely.git
 git push -u origin main       # 인증이 필요하면 GitHub 로그인 / PAT 사용
 ```
+
+> **push 상태**: 자동 `git push -u origin main`은 `remote: Repository not found`로 실패했습니다. GitHub에 `kimkkkkj/pixely` 저장소를 (빈 저장소로) 만들고 로그인한 뒤, 루트에서 `git push -u origin main`을 실행하세요.

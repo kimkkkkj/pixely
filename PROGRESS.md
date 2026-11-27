@@ -66,4 +66,4 @@
 - [x] 기존 시안 문제 7가지 전부 해결 (README 9장)
 - [x] 3개 provider 구현, AI_PROVIDER 로 전환
 - [x] 반응형 1440/1024/768/390 확인, alert/confirm 미사용
-- [x] git push (아래 결과 참고)
+- [ ] git push — 실패: `remote: Repository not found` (원격 저장소 미생성 또는 접근 권한 없음). 저장소 생성/로그인 후 `git push -u origin main` 수동 실행 필요
