@@ -28,3 +28,15 @@
 - ai-server 기본 엔진은 Pillow mock(백엔드 mock 과 같은 규칙), ComfyUI 는 API 포맷 워크플로우 JSON 의 {{PRODUCT_IMAGE}}/{{MODEL_IMAGE}}/{{PROMPT}} 치환 방식으로 연결 — 실제 ComfyUI 서버가 없어 미검증.
 - OpenAI provider 는 키가 없어 실제 호출 대신 로컬 스텁 HTTP 서버 테스트로 요청 형식만 검증.
 - 원 지시서의 '6. 완료 기준' 이 잘려 있어 본문 요구사항으로 체크리스트를 구성 (PROGRESS.md).
+
+## 2차 작업 (_legacy 반영)
+- `_legacy/` 확인 결과 기획서 PDF와 메인 페이지 원본 HTML(index.html)은 없음 → 메인 구성은 `css/style.css`의 템플릿 섹션(hero, feature, service, section-counter, testimonial, pricing, contact/subscribe, playvid, footer)과 지시서의 기획 흐름을 기준으로 점검. PDF 기반 화면 설계 비교는 하지 못함.
+- `_legacy/`는 계속 `.gitignore`로 제외. 1차 작업 때 커밋된 `_legacy/README.md`는 인덱스에서 제거(`git rm --cached`)하고 로컬 파일은 그대로 둠.
+- 상품 시드: `service-images/tab1` 14장을 `backend/src/main/resources/seed/products/product-NN.jpg`로 복사 (사용자 허용). 브랜드명이 들어간 실제 상품 컷이라 제목은 브랜드명 없이 일반 명칭으로 지정.
+- 모델 시드: `service-images/tab2`는 실존 인물(연예인 가능성) 사진이라 초상권·퍼블리시티권 문제가 있음 → 어디에도 복사·커밋하지 않고, 코드로 그린 가상 모델 8장을 계속 사용. 같은 이유로 인물이 나오는 필터 데모 GIF(`F1~F6.gif`)도 사용하지 않음.
+- `LEGACY_IMAGES_DIR` 기반 런타임 시드는 삭제 → tab2를 실수로 시드할 여지를 없앰.
+- `video/`(약 300MB)는 커밋하지 않음. 메인 히어로에 `VITE_HERO_VIDEO` 환경변수 자리를 두고, 로컬에서 `frontend/public/videos/`(gitignore)에 복사해 쓰는 방법을 README에 적음.
+- DB: `.env`의 접속 정보(pixely 계정, MYSQL_ROOT_PASSWORD의 root, H2용 sa)로 로컬 MySQL 3306 접속을 시도했으나 모두 `ERROR 1045 Access denied` → H2 유지. MySQL 전환 방법은 README 7장.
+- Java: Gradle toolchain 17 + foojay resolver로 JDK 17을 자동 다운로드. Gradle을 실행할 JVM은 따로 필요해서, `gradlew.bat`에 JAVA_HOME/PATH가 없으면 `~/.jdks`, Adoptium, Oracle, Microsoft, Corretto, Zulu 설치 폴더에서 JDK를 찾는 fallback을 추가 (wrapper를 업그레이드하면 다시 넣어야 함).
+- Gradle 8.14.3은 Java 24까지만 실행 가능 → fallback은 폴더 이름순으로 마지막 JDK를 고르는데, 이 PC에서는 temurin-24가 선택됨.
+- IntelliJ 기본 템플릿 `src/Main.java`, `pixely.iml`은 Pixely와 무관해서 삭제. `.idea/`는 IDE 로컬 설정이라 그대로 두고 gitignore 유지.

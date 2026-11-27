@@ -18,8 +18,6 @@ pixely:
     allowed-origins: http://localhost:5174
   storage:
     upload-dir: ./build/test-uploads
-  seed:
-    legacy-images-dir: ./build/no-legacy-dir
   ai:
     provider: mock
     timeout-seconds: 10

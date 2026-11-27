@@ -12,7 +12,6 @@ public record PixelyProperties(
         Cors cors,
         String publicBaseUrl,
         Storage storage,
-        Seed seed,
         Ai ai
 ) {
     public record Jwt(String secret, long expirationMinutes) {}
@@ -27,8 +26,6 @@ public record PixelyProperties(
     }
 
     public record Storage(String uploadDir) {}
-
-    public record Seed(String legacyImagesDir) {}
 
     public record Ai(String provider, int timeoutSeconds, int rateLimitPerMinute,
                      Mock mock, OpenAi openai, FastApi fastapi) {

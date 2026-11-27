@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 /**
- * _legacy/service-images 가 없을 때 쓰는 코드 생성 샘플.
+ * 코드로 생성하는 샘플 (상품: classpath 시드가 없을 때 대체, 모델: 항상 사용).
  * - 상품: 투명 배경 PNG 의 제품 일러스트 (mock 합성 시 자연스럽게 얹히도록)
  * - 모델: 실존 인물이 아닌 가상 모델 일러스트 (저작권/초상권 문제 없음)
  */

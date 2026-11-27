@@ -72,6 +72,13 @@ set JAVA_EXE=java.exe
 %JAVA_EXE% -version >NUL 2>&1
 if %ERRORLEVEL% equ 0 goto execute
 
+@rem Pixely: if java is neither in JAVA_HOME nor PATH, look for an installed JDK
+@rem in common locations (IntelliJ ~/.jdks, Adoptium, Oracle, Microsoft, Corretto, Zulu).
+for %%d in ("%USERPROFILE%\.jdks" "%ProgramFiles%\Eclipse Adoptium" "%ProgramFiles%\Java" "%ProgramFiles%\Microsoft" "%ProgramFiles%\Amazon Corretto" "%ProgramFiles%\Zulu") do (
+    if exist "%%~d" for /d %%j in ("%%~d\*") do if exist "%%~j\bin\java.exe" set "JAVA_HOME=%%~j"
+)
+if defined JAVA_HOME goto findJavaFromJavaHome
+
 1>&2 echo.
 1>&2 echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
 1>&2 echo.

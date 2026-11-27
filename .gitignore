@@ -44,8 +44,9 @@ venv/
 Thumbs.db
 .claude/settings.local.json
 
-# IntelliJ ê¸°ë³¸ í…œí”Œë¦¿(src/Main.java)ì€ í”„ë¡œì íŠ¸ì™€ ë¬´ê´€í•˜ë¯€ë¡œ ì œì™¸
-/src/
 
-# ¿øº» ½Ã¾È (·ÎÄÃ Âü°í¿ë, ÀúÀå¼Ò Á¦¿Ü)
+# Original design files (local only, never committed: may contain portraits/videos)
 _legacy/
+
+# Optional hero video copied from _legacy/video (large, local only)
+frontend/public/videos/

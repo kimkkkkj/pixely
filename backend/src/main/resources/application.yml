@@ -40,8 +40,6 @@ pixely:
   public-base-url: ${PUBLIC_BASE_URL:http://localhost:5174}
   storage:
     upload-dir: ${UPLOAD_DIR:./uploads}
-  seed:
-    legacy-images-dir: ${LEGACY_IMAGES_DIR:../_legacy/service-images}
   ai:
     provider: ${AI_PROVIDER:mock}
     timeout-seconds: ${AI_TIMEOUT_SECONDS:60}

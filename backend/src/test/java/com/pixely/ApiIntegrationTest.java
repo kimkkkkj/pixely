@@ -140,12 +140,14 @@ class ApiIntegrationTest {
     void anonymousCanBrowseSeededSamples() throws Exception {
         mvc.perform(get("/api/library").param("type", "PRODUCT"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.totalElements").value(8));
+                .andExpect(jsonPath("$.data.totalElements").value(14));
         mvc.perform(get("/api/library").param("type", "MODEL").param("q", "가상 모델"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.totalElements").value(8));
         mvc.perform(get("/api/library").param("type", "PRODUCT").param("q", "립스틱"))
-                .andExpect(jsonPath("$.data.totalElements").value(1));
+                .andExpect(jsonPath("$.data.totalElements").value(2));
+        mvc.perform(get("/api/library").param("type", "PRODUCT").param("q", "세럼"))
+                .andExpect(jsonPath("$.data.totalElements").value(3));
     }
 
     @Test
@@ -164,10 +166,10 @@ class ApiIntegrationTest {
         mvc.perform(get(url)).andExpect(status().isOk());
 
         mvc.perform(get("/api/library").param("type", "PRODUCT").header("Authorization", "Bearer " + token))
-                .andExpect(jsonPath("$.data.totalElements").value(9));
+                .andExpect(jsonPath("$.data.totalElements").value(15));
         // 다른 사용자에게는 보이지 않음
         mvc.perform(get("/api/library").param("type", "PRODUCT").header("Authorization", "Bearer " + signup()))
-                .andExpect(jsonPath("$.data.totalElements").value(8));
+                .andExpect(jsonPath("$.data.totalElements").value(14));
 
         mvc.perform(delete("/api/library/" + id).header("Authorization", "Bearer " + signup()))
                 .andExpect(status().isForbidden());

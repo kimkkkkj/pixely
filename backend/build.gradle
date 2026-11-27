@@ -8,14 +8,14 @@ group = 'com'
 version = '0.1.0'
 description = 'Pixely - AI 광고 이미지 합성 서비스 백엔드'
 
+// 컴파일·테스트·bootRun 모두 Java 17 toolchain 사용 (없으면 foojay 로 자동 다운로드)
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
-// 설치된 JDK(17 이상)로 컴파일하되 결과물은 항상 Java 17 바이트코드
 tasks.withType(JavaCompile).configureEach {
-    options.release = 17
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
 }

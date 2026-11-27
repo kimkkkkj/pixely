@@ -26,5 +26,5 @@ public interface LibraryImageRepository extends JpaRepository<LibraryImage, Long
             """)
     Page<LibraryImage> searchPublic(@Param("type") ImageType type, @Param("q") String q, Pageable pageable);
 
-    long countByOwnerIdIsNull();
+    long countByOwnerIdIsNullAndType(ImageType type);
 }
