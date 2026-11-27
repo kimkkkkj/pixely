@@ -66,7 +66,7 @@
 - [x] 기존 시안 문제 7가지 전부 해결 (README 9장)
 - [x] 3개 provider 구현, AI_PROVIDER 로 전환
 - [x] 반응형 1440/1024/768/390 확인, alert/confirm 미사용
-- [ ] git push — 실패: `remote: Repository not found` (원격 저장소 미생성 또는 접근 권한 없음). 저장소 생성/로그인 후 `git push -u origin main` 수동 실행 필요
+- [x] git push — 1차에는 `Repository not found`로 실패, 2차 작업 후 성공 (아래 5) 참고)
 
 ---
 
@@ -127,3 +127,6 @@
 - [x] 브라우저 흐름(puppeteer-core + Chrome headless): 회원가입 → 상품/모델 선택 → 생성(mock) → 로맨틱 필터 → 다운로드(`pixely-2-romantic.png`) → 공유 링크 공개 페이지(원본/로맨틱) → 히스토리 → 다시 편집 → 로그인 모달 → 관리자 샘플 업로드(15→16), 콘솔 에러·5xx 0건
 - [x] 1440 / 1024 / 768 / 390 화면 확인
 - 발견·수정: 우측 상단 토스트가 새 공유/다운로드 버튼을 가림 → 토스트를 상단 중앙으로 이동. 태블릿에서 라이브러리 타일·슬롯이 과도하게 커짐 → 자동 열 수 그리드, 슬롯 최대 200px
+
+## 5) 마무리
+- [x] `git push -u origin main` 성공 (`c39670f..bfada3e`, origin = https://github.com/kimkkkkj/pixely.git)
