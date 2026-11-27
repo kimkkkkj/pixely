@@ -25,3 +25,6 @@
 - 공유: 터치 기기 + navigator.share 지원 시 네이티브 공유, 그 외 클립보드 복사, 클립보드 거부 시 링크 모달.
 - 비로그인도 스튜디오/라이브러리 조회 가능, 생성·업로드 시 로그인 모달 (선택 상태는 zustand 에 유지).
 - 태블릿 이하(≤1023px)는 CSS grid-template-areas 로 1.이미지 선택 → 2.요청사항 → 3.결과 세로 단계형 전환.
+- ai-server 기본 엔진은 Pillow mock(백엔드 mock 과 같은 규칙), ComfyUI 는 API 포맷 워크플로우 JSON 의 {{PRODUCT_IMAGE}}/{{MODEL_IMAGE}}/{{PROMPT}} 치환 방식으로 연결 — 실제 ComfyUI 서버가 없어 미검증.
+- OpenAI provider 는 키가 없어 실제 호출 대신 로컬 스텁 HTTP 서버 테스트로 요청 형식만 검증.
+- 원 지시서의 '6. 완료 기준' 이 잘려 있어 본문 요구사항으로 체크리스트를 구성 (PROGRESS.md).

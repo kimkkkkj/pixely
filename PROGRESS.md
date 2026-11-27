@@ -47,3 +47,23 @@
 - [x] 회원가입 → 스튜디오 → 상품/모델 선택 → 예시 칩 → 생성(mock, polling) → 로맨틱 필터 → 다운로드(`pixely-N-romantic.png`) → 공유 링크(공개 페이지에 원본/로맨틱 버전 표시) → 히스토리 → 상세 → 다시 편집 → 390/768/1024 반응형 → 비로그인 생성 시 로그인 모달 → 관리자 로그인 → 샘플 업로드(8→9)
 - [x] 콘솔 에러 / 5xx 응답 0건
 - 발견·수정: 결과 이미지가 미리보기 영역을 넘치던 문제(absolute + object-fit), 토스트가 필터 스트립을 가리던 문제(우측 상단으로 이동), mock 합성 그림자가 투명 상품에서 사각형으로 보이던 문제(알파 실루엣 블러)
+
+## 8) openai / fastapi provider + ai-server
+- [x] OpenAiImageGenerationProvider — `/v1/images/edits`, `image[]` 2장 + 영어 광고 프롬프트(PromptBuilder) — 스텁 서버 테스트로 요청 형식/에러 처리 검증 (실제 키 없음)
+- [x] FastApiImageGenerationProvider — ai-server `/generate` 위임, 실제 연동 확인 (AI_PROVIDER=fastapi 로 생성 DONE, 결과 이미지 확인)
+- [x] ai-server (FastAPI + Pillow mock, ComfyUI 워크플로우 연결 모듈)
+- 발견·수정: JDK HttpClient 의 h2c 업그레이드를 uvicorn 이 거부(422) → HTTP/1.1 고정
+
+## 9) README
+- [x] 소개, 아키텍처(Mermaid), ERD(Mermaid), API 목록, PowerShell 실행법, 환경변수, provider 전환, MySQL 전환, 기존 시안 대비 개선점
+
+## 완료 기준 체크 (지시서 6번이 잘려 있어 본문 요구사항 기준으로 정리)
+- [x] 0-4 규칙에 따른 DB 결정 + DECISIONS.md 기록 (H2 기본, MySQL 전환 가이드, compose 3307)
+- [x] 비밀값 전부 .env, .env 는 git 제외
+- [x] 백엔드 `gradlew build` 성공, 테스트 18개 통과
+- [x] 프론트 `npm run build` 에러 0, `npm run lint` 경고 0
+- [x] 키 없이(mock) 회원가입→생성→필터→다운로드→공유→히스토리→관리자 업로드 전체 흐름 브라우저 점검 통과
+- [x] 기존 시안 문제 7가지 전부 해결 (README 9장)
+- [x] 3개 provider 구현, AI_PROVIDER 로 전환
+- [x] 반응형 1440/1024/768/390 확인, alert/confirm 미사용
+- [x] git push (아래 결과 참고)

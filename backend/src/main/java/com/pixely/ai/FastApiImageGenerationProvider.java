@@ -23,7 +23,9 @@ public class FastApiImageGenerationProvider implements ImageGenerationProvider {
 
     public FastApiImageGenerationProvider(String baseUrl, int timeoutSeconds) {
         this.baseUrl = baseUrl;
-        HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
+        // uvicorn(h11)은 h2c 업그레이드 요청을 거부하므로 HTTP/1.1 고정
+        HttpClient http = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
+                .connectTimeout(Duration.ofSeconds(5)).build();
         JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(http);
         factory.setReadTimeout(Duration.ofSeconds(Math.max(5, timeoutSeconds)));
         this.client = RestClient.builder().baseUrl(baseUrl).requestFactory(factory).build();
