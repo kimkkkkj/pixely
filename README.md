@@ -142,6 +142,11 @@ erDiagram
 - (선택) Python 3.10 이상: ai-server 실행용
 - (선택) Docker Desktop: MySQL 컨테이너용
 
+### IntelliJ에서 열기
+- **File > Open**으로 `C:\Users\nino3\IdeaProjects\pixely` 폴더를 엽니다. `frontend`, `backend` 안에서 **New Project**를 만들지 마세요 (Hello World 템플릿 폴더가 생깁니다).
+- 백엔드: `backend/build.gradle`을 우클릭해 **Link Gradle Project**로 연결하면 Gradle 탭에서 `bootRun`을 실행할 수 있습니다.
+- 프론트엔드: `frontend/package.json`의 `dev` 스크립트 옆 ▶ 버튼으로 실행하거나, 터미널에서 아래 명령을 쓰세요.
+
 ### 1) 환경변수
 ```powershell
 # 루트에서 (이미 .env 가 있으면 생략)

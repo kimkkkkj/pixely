@@ -1,6 +1,6 @@
 # PROGRESS
 
-- 프로젝트 루트: `C:\Users\nino3\IdeaProjects\pixely\pixely`
+- 프로젝트 루트: `C:\Users\nino3\IdeaProjects\pixely` (처음에는 `...\pixely\pixely`였으나 한 단계 위로 이동)
 
 ## 사전 준비
 - [x] 0-1 작업 범위 고정 (루트 확인)
