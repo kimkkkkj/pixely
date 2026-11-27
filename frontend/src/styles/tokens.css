@@ -1,0 +1,138 @@
+/* =====================================================================
+   Pixely Design Tokens
+   - 이 파일 밖에서는 색상 리터럴(#hex, rgb())을 쓰지 않는다.
+   - 간격은 4px 단위, 폰트 크기는 스케일 변수만 사용.
+   ===================================================================== */
+:root {
+  /* ---------- Brand ---------- */
+  --brand-orange: #FFA63D;
+  --brand-pink: #FF3D77;
+  --brand-blue: #338AFF;
+  --brand-mint: #3CF0C5;
+  --brand-blue-strong: #1F6FE5;
+  --brand-blue-deep: #1B4FC4;
+
+  --gradient-brand: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-pink) 34%, var(--brand-blue) 68%, var(--brand-mint) 100%);
+  --gradient-brand-diag: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-pink) 34%, var(--brand-blue) 68%, var(--brand-mint) 100%);
+  --gradient-button: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-deep) 100%);
+  --gradient-button-hover: linear-gradient(135deg, #4A98FF 0%, var(--brand-blue-strong) 100%);
+
+  /* ---------- Dark surfaces (기본 테마) ---------- */
+  --color-bg: #05060B;
+  --color-bg-elevated: #0A0C14;
+  --color-surface-1: #0F121C;
+  --color-surface-2: #151926;
+  --color-surface-3: #1D2233;
+  --color-surface-hover: #232A3E;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --color-text: #F3F5FA;
+  --color-text-muted: #A4ABBE;
+  --color-text-subtle: #6D7489;
+  --color-text-inverse: #0B0D14;
+
+  /* ---------- Light surfaces (메인 페이지 교차 섹션) ---------- */
+  --color-light-bg: #F4F6FB;
+  --color-light-surface: #FFFFFF;
+  --color-light-border: #E3E7F0;
+  --color-light-text: #0B0D14;
+  --color-light-muted: #59607A;
+
+  /* ---------- Semantic ---------- */
+  --color-primary: var(--brand-blue);
+  --color-success: var(--brand-mint);
+  --color-warning: var(--brand-orange);
+  --color-danger: #FF4D6A;
+  --color-danger-soft: rgba(255, 77, 106, 0.12);
+  --color-success-soft: rgba(60, 240, 197, 0.12);
+  --color-primary-soft: rgba(51, 138, 255, 0.14);
+  --color-warning-soft: rgba(255, 166, 61, 0.14);
+
+  --color-overlay: rgba(3, 4, 8, 0.72);
+  --color-scrim: rgba(5, 6, 11, 0.55);
+  --color-glass: rgba(15, 18, 28, 0.72);
+  --color-white: #FFFFFF;
+  --color-white-a10: rgba(255, 255, 255, 0.10);
+  --color-white-a20: rgba(255, 255, 255, 0.20);
+  --color-black-a40: rgba(0, 0, 0, 0.40);
+  --color-skeleton: rgba(255, 255, 255, 0.05);
+  --color-skeleton-shine: rgba(255, 255, 255, 0.10);
+
+  /* ---------- Spacing (4px 단위) ---------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ---------- Radius ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 999px;
+
+  /* ---------- Shadow ---------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.45);
+  --shadow-light: 0 12px 32px rgba(17, 24, 39, 0.08);
+  --shadow-glow-blue: 0 8px 28px rgba(51, 138, 255, 0.35);
+  --shadow-glow-pink: 0 8px 28px rgba(255, 61, 119, 0.30);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--brand-blue);
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'Noto Sans KR', system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-base: 15px;
+  --fs-md: 16px;
+  --fs-lg: 18px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+  --fs-3xl: clamp(26px, 3vw, 32px);
+  --fs-4xl: clamp(30px, 4vw, 44px);
+  --fs-5xl: clamp(36px, 6vw, 68px);
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-black: 900;
+  --lh-tight: 1.2;
+  --lh-snug: 1.4;
+  --lh-body: 1.65;
+  --ls-tight: -0.02em;
+  --ls-tighter: -0.035em;
+
+  /* ---------- Layout ---------- */
+  --container-max: 1200px;
+  --navbar-height: 64px;
+  --studio-left: 320px;
+  --studio-right: 340px;
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 400ms;
+
+  /* ---------- Z-index ---------- */
+  --z-nav: 100;
+  --z-dropdown: 200;
+  --z-modal: 1000;
+  --z-toast: 1100;
+
+  /* ---------- Mask (색이 아닌 불투명 마스크용) ---------- */
+  --mask-solid: #000;
+}

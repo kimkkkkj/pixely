@@ -32,3 +32,13 @@
 
 ## 4) 백엔드 빌드/테스트
 - [x] `.\gradlew build` 성공 — ApiIntegrationTest 11개 + MockImageGenerationProviderTest 3개 통과 (H2 test 프로필)
+
+## 5) 프론트엔드
+- [x] 스캐폴딩 (React 18 + Vite 6 + React Router 6 + Axios + Zustand + Bootstrap 5 + AOS + Swiper)
+- [x] 디자인 토큰(tokens.css) / 공통 컴포넌트 (Button, Modal, Toast, ConfirmHost, Card, Tabs, Skeleton, Empty/Error, WaveLoader, Icon)
+- [x] 메인 페이지 (히어로, 문제 정의, 3단계, 플랫폼 뱃지, 카운터, 비포/애프터 Swiper, FAQ, CTA, 푸터)
+- [x] 스튜디오 (라이브러리 탭/검색/무한스크롤/드래그 스크롤/업로드, 슬롯, 요청사항+칩, 생성+polling, Canvas 필터 6종, 다운로드, 공유)
+- [x] 히스토리 / 공유 / 로그인·회원가입 / 관리자
+
+## 6) 프론트 빌드
+- [x] `npm run lint` 경고 0, `npm run build` 에러 0

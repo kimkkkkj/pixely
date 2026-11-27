@@ -53,20 +53,17 @@ public class MockImageGenerationProvider implements ImageGenerationProvider {
 
         // 3) 상품 배치 (가로 38%, 세로 최대 50%)
         boolean alpha = ImageUtils.hasAlpha(product);
-        double ps = Math.min(cw * 0.38 / product.getWidth(), ch * 0.5 / product.getHeight());
+        double ps = Math.min(cw * 0.42 / product.getWidth(), ch * 0.5 / product.getHeight());
         int pw = Math.max(1, (int) (product.getWidth() * ps)), ph = Math.max(1, (int) (product.getHeight() * ps));
         BufferedImage p = ImageUtils.scale(ImageUtils.toArgb(product), pw, ph);
         int margin = (int) (Math.min(cw, ch) * 0.06);
         int px = cw - pw - margin, py = ch - ph - margin;
         float radius = alpha ? 0 : Math.min(pw, ph) * 0.08f;
 
-        // 부드러운 그림자: 투명도를 낮춘 사각형을 겹쳐서 블러처럼 표현
-        for (int i = 14; i >= 1; i--) {
-            int spread = i * Math.max(1, margin / 10);
-            g.setColor(new Color(0, 0, 0, 7));
-            g.fill(new RoundRectangle2D.Float(px - spread / 2f + margin / 6f, py - spread / 2f + margin / 3f,
-                    pw + spread, ph + spread, radius + spread, radius + spread));
-        }
+        // 부드러운 그림자: 상품 실루엣(알파)으로 만든 그림자를 축소→확대해서 블러 처리
+        int pad = Math.max(8, margin / 2);
+        BufferedImage shadow = softShadow(p, alpha ? null : new RoundRectangle2D.Float(0, 0, pw, ph, radius * 2, radius * 2), pad);
+        g.drawImage(shadow, px - pad + margin / 8, py - pad + margin / 4, null);
 
         if (alpha) {
             g.drawImage(p, px, py, null);
@@ -89,5 +86,29 @@ public class MockImageGenerationProvider implements ImageGenerationProvider {
         // 5) 요청사항 키워드 기반 톤 보정
         ToneAdjustment.fromPrompt(prompt).apply(canvas);
         return canvas;
+    }
+
+    /** shape 가 null 이면 이미지 알파를 실루엣으로 사용 */
+    private static BufferedImage softShadow(BufferedImage src, Shape shape, int pad) {
+        int w = src.getWidth() + pad * 2, h = src.getHeight() + pad * 2;
+        BufferedImage mask = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = mask.createGraphics();
+        ImageUtils.quality(g);
+        if (shape == null) {
+            int[] px = src.getRGB(0, 0, src.getWidth(), src.getHeight(), null, 0, src.getWidth());
+            for (int i = 0; i < px.length; i++) {
+                int a = (px[i] >>> 24) & 0xff;
+                px[i] = ((int) (a * 0.42) << 24);
+            }
+            mask.setRGB(pad, pad, src.getWidth(), src.getHeight(), px, 0, src.getWidth());
+        } else {
+            g.setColor(new Color(0, 0, 0, 107));
+            g.translate(pad, pad);
+            g.fill(shape);
+        }
+        g.dispose();
+        // 1/10 로 줄였다가 다시 키우면 가우시안에 가까운 블러가 된다
+        int sw = Math.max(1, w / 10), sh = Math.max(1, h / 10);
+        return ImageUtils.scale(ImageUtils.scale(mask, sw, sh), w, h);
     }
 }

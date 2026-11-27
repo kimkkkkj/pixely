@@ -229,7 +229,7 @@ public final class PlaceholderImages {
                 new float[]{0f, 1f}, new Color[]{new Color(255, 255, 255, 90), new Color(255, 255, 255, 0)}));
         g.fillRect(0, 0, w, h);
 
-        float cx = w / 2f, headW = w * 0.30f, headH = h * 0.29f, headY = h * 0.27f;
+        float cx = w / 2f, headW = w * 0.31f, headH = h * 0.30f, headY = h * 0.30f;
 
         // 머리카락(뒤)
         g.setColor(s.hair());

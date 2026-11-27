@@ -13,3 +13,15 @@
 - 모든 설정은 루트 `.env` 하나에서 읽음: Spring 은 `spring.config.import=optional:file:../.env[.properties]`, Vite 는 `envDir: '..'`, ai-server 는 python-dotenv.
 - DB 접속은 `DB_URL/DB_USERNAME/DB_PASSWORD` 3개로 추상화 → URL 만 바꾸면 H2 ↔ MySQL 전환 (드라이버/방언 자동 감지).
 - 로컬 git 사용자 정보가 없어 저장소 로컬 설정으로 user.name=kimkkkkj(원격 소유자), user.email=계정 이메일 지정.
+
+## 프론트엔드
+- 슬라이더는 Swiper 로 통일(tiny-slider 제거) — React 공식 컴포넌트가 있고 a11y/키보드 모듈 제공.
+- GLightbox 는 사용하지 않음 — 결과 상세는 접근성 처리된 공용 Modal 로 대체해 의존성 축소.
+- custom.js/navbar.js/counter.js/rellax → `Navbar`(모바일 메뉴), `useCountUp`, `useParallax`, App 의 `AOS.init` 으로 이식.
+- Noto Sans KR 은 Google Fonts CDN 으로 로드 (번들 크기 절약), 실패 시 시스템 한글 폰트로 대체.
+- 색상 리터럴은 `styles/tokens.css` 에만 존재 (mask 용 불투명색도 `--mask-solid` 토큰). Canvas 필터의 픽셀 연산 수치는 JS 상수로 유지.
+- 필터는 Canvas 픽셀 연산으로 구현 (로맨틱 글로우는 ctx.filter 대신 축소→확대 블러로 Safari 호환).
+- 다운로드/공유 시 현재 필터 버전을 `POST /variants` 로 저장 → 공유 페이지·히스토리에서 필터 버전 확인 가능.
+- 공유: 터치 기기 + navigator.share 지원 시 네이티브 공유, 그 외 클립보드 복사, 클립보드 거부 시 링크 모달.
+- 비로그인도 스튜디오/라이브러리 조회 가능, 생성·업로드 시 로그인 모달 (선택 상태는 zustand 에 유지).
+- 태블릿 이하(≤1023px)는 CSS grid-template-areas 로 1.이미지 선택 → 2.요청사항 → 3.결과 세로 단계형 전환.
