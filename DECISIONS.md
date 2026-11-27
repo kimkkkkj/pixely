@@ -52,3 +52,7 @@
 - H2 콘솔은 임의의 JDBC URL로 접속할 수 있어 외부에 노출되면 위험함 → `H2_CONSOLE_ENABLED`(기본 false)로만 켜고, Spring Security에서 `hasIpAddress('127.0.0.1') or hasIpAddress('::1')`로 로컬 요청만 허용, H2 자체 설정 `web-allow-others=false`도 함께 적용.
 - 개발 편의를 위해 `.env`와 `.env.example`에는 `true`로 둠. 테스트 프로필은 명시적으로 false.
 - 콘솔 경로는 Vite 프록시를 거치지 않고 백엔드 포트(8081)로 직접 접속 (콘솔 내부 프레임·세션 경로 문제를 피하기 위함).
+
+## 폴더 구조 정리
+- 사용자 요청에 따라 프로젝트 루트를 `IdeaProjects\pixely\pixely`에서 `IdeaProjects\pixely`로 올림. 경로는 모두 상대경로(`../.env`, `./data`, `./uploads`, Vite `envDir: '..'`)라 코드 수정 없이 동작.
+- 상위 폴더의 원본 사본은 `_legacy`와 MD5가 모두 같아 사용자 확인 후 삭제. 원본은 `_legacy`(gitignore)에만 남김.

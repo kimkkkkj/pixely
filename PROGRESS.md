@@ -135,3 +135,10 @@
 - [x] `/h2-console` 활성화 (`H2_CONSOLE_ENABLED`, 로컬 전용)
 - [x] 확인: 127.0.0.1·::1 → 200, LAN IP(172.30.x.x) → 401 차단, 브라우저로 로그인 후 `users`/`library_images` 조회 성공
 - [x] `gradlew build` 테스트 18/18 통과
+
+## 추가: 폴더 구조 정리
+- [x] 상위 `IdeaProjects\pixely`의 원본 사본(css, images, js, pavi, service-images, video, service.html — 98개 파일, 약 300MB) 삭제. MD5 비교로 `_legacy`와 모두 같은 것을 확인한 뒤 진행
+- [x] `pixely\pixely`의 내용(.git 포함)을 `IdeaProjects\pixely`로 한 단계 올림 → `pixely\frontend`, `pixely\backend` 구조
+- [x] IntelliJ가 새로 만든 Hello World 템플릿 폴더(`backend\untitled`, `frontend\pixely`, `frontend\untitled`) 삭제
+- [x] 새 위치에서 확인: `gradlew build` 18/18, `npm run lint`/`build` 통과, ai-server venv 정상, 브라우저 전체 흐름 에러 0, H2 콘솔 200, 기존 H2 데이터 유지
+- [ ] 빈 `pixely\pixely` 폴더는 작업 중이던 Claude Code 세션이 쓰고 있어 삭제하지 못함 → 세션 종료 후 직접 삭제
