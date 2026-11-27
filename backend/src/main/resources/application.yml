@@ -9,6 +9,15 @@ spring:
     url: ${DB_URL:jdbc:h2:file:./data/pixely;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE}
     username: ${DB_USERNAME:sa}
     password: ${DB_PASSWORD:}
+  # 개발용 H2 웹 콘솔 (http://localhost:8081/h2-console)
+  # H2_CONSOLE_ENABLED=true 일 때만 켜지고, 로컬(127.0.0.1/::1) 접속만 허용 (SecurityConfig 참고)
+  h2:
+    console:
+      enabled: ${H2_CONSOLE_ENABLED:false}
+      path: /h2-console
+      settings:
+        web-allow-others: false
+        trace: false
   jpa:
     open-in-view: false
     hibernate:

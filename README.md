@@ -191,6 +191,7 @@ cd frontend; npm run lint; npm run build
 | `FRONTEND_PORT` | 5174 | Vite 포트 (5173이 이미 사용 중이라 변경) |
 | `AI_SERVER_PORT` | 8000 | ai-server 포트 |
 | `DB_URL` / `DB_USERNAME` / `DB_PASSWORD` | H2 파일 DB | JDBC 접속 정보 (URL로 H2/MySQL 자동 판별) |
+| `H2_CONSOLE_ENABLED` | false (`.env` 예시는 true) | 개발용 H2 웹 콘솔 `/h2-console` (로컬 접속만 허용) |
 | `MYSQL_PORT` / `MYSQL_DATABASE` / `MYSQL_USER` / `MYSQL_PASSWORD` / `MYSQL_ROOT_PASSWORD` | 3307 / pixely … | docker-compose MySQL 설정 |
 | `JWT_SECRET` | (필수) | 32바이트 이상 랜덤 문자열 |
 | `JWT_EXPIRATION_MINUTES` | 1440 | 토큰 만료 시간 (분) |
@@ -240,6 +241,28 @@ docker compose --env-file .env up -d
 # .env: DB_URL=jdbc:mysql://localhost:3307/pixely?...  DB_USERNAME=pixely  DB_PASSWORD=<MYSQL_PASSWORD>
 ```
 테이블은 JPA `ddl-auto=update`가 자동으로 생성합니다.
+
+### H2 콘솔로 데이터 보기 (개발용)
+
+백엔드가 실행 중일 때 브라우저에서 **http://localhost:8081/h2-console** 을 열고 아래 값으로 **Connect** 하세요.
+
+| 항목 | 값 |
+|---|---|
+| Driver Class | `org.h2.Driver` (기본값) |
+| JDBC URL | `.env`의 `DB_URL`과 같은 값: `jdbc:h2:file:./data/pixely;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;AUTO_SERVER=TRUE` |
+| User Name | `sa` |
+| Password | (빈칸) |
+
+예시 쿼리:
+```sql
+SELECT id, email, nickname, role, created_at FROM users;
+SELECT type, COUNT(*) FROM library_images GROUP BY type;
+SELECT id, user_id, status, provider, prompt, result_url FROM generations ORDER BY id DESC;
+```
+- 테이블: `users`, `library_images`, `generations`, `generation_variants`, `share_links`
+- 비밀번호는 BCrypt 해시로만 저장되어 원문은 볼 수 없습니다.
+- 콘솔에서 데이터를 고치거나 지우면 앱에 바로 반영됩니다. 처음 상태로 되돌리려면 백엔드를 끄고 `backend\data`, `backend\uploads`를 지운 뒤 다시 실행하세요.
+- 보안: `.env`의 `H2_CONSOLE_ENABLED=true`일 때만 켜지고, **이 PC(127.0.0.1 / ::1)에서 접속할 때만** 열립니다. 같은 네트워크의 다른 기기에서는 차단됩니다. MySQL로 전환하거나 배포할 때는 `H2_CONSOLE_ENABLED=false`로 두세요.
 
 ## 8. 메인 히어로 영상 넣기 (선택)
 

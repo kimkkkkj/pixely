@@ -130,3 +130,8 @@
 
 ## 5) 마무리
 - [x] `git push -u origin main` 성공 (`c39670f..bfada3e`, origin = https://github.com/kimkkkkj/pixely.git)
+
+## 추가: H2 콘솔
+- [x] `/h2-console` 활성화 (`H2_CONSOLE_ENABLED`, 로컬 전용)
+- [x] 확인: 127.0.0.1·::1 → 200, LAN IP(172.30.x.x) → 401 차단, 브라우저로 로그인 후 `users`/`library_images` 조회 성공
+- [x] `gradlew build` 테스트 18/18 통과

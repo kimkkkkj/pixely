@@ -47,3 +47,8 @@
 - 템플릿의 testimonial(후기)은 실제 후기가 없어 꾸며낸 후기가 될 수 있어 넣지 않고 비포/애프터 슬라이더로 대체. pricing·contact도 정책 정보가 없어 미반영.
 - 토스트 위치는 스튜디오의 상단 버튼(우측)과 필터·생성 버튼(하단)을 피해 상단 중앙으로.
 - `robot.png`(605KB)는 360px로 줄여 약 145KB로 커밋.
+
+## H2 콘솔
+- H2 콘솔은 임의의 JDBC URL로 접속할 수 있어 외부에 노출되면 위험함 → `H2_CONSOLE_ENABLED`(기본 false)로만 켜고, Spring Security에서 `hasIpAddress('127.0.0.1') or hasIpAddress('::1')`로 로컬 요청만 허용, H2 자체 설정 `web-allow-others=false`도 함께 적용.
+- 개발 편의를 위해 `.env`와 `.env.example`에는 `true`로 둠. 테스트 프로필은 명시적으로 false.
+- 콘솔 경로는 Vite 프록시를 거치지 않고 백엔드 포트(8081)로 직접 접속 (콘솔 내부 프레임·세션 경로 문제를 피하기 위함).
